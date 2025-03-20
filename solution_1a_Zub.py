@@ -9,6 +9,8 @@ def solution_1a(points, stc, stic, ec,  result_of_cost, connected_edges, speed, 
   # Define nodes and arcs
   nodes = [i for i in range(len(points))]
   arcs = connected_edges
+  m1 = len(nodes) - 1
+  m2 = len(arcs)
   print(arcs)
 
   station_cost = stc
@@ -36,8 +38,11 @@ def solution_1a(points, stc, stic, ec,  result_of_cost, connected_edges, speed, 
   # Variables: flow on each arc
   flow = pulp.LpVariable.dicts("Flow", arcs, lowBound=0, upBound=demand, cat="Continuous")
 
+  # Binary decision variables
+  y = pulp.LpVariable.dicts("y", arcs, cat="Binary")
+
   # Objective function: Minimize cost
-  lp += (alpha * pulp.lpSum(cost[i, j] for (i, j) in arcs)) + (beta * pulp.lpSum(flow[i, j] * time[i, j] for (i, j) in arcs))
+  lp += (alpha * pulp.lpSum(cost[i, j] * y[i, j] for (i, j) in arcs)) + (beta * pulp.lpSum(flow[i, j] * time[i, j] for (i, j) in arcs))
 
   # Constraints
   # # Flow conservation
@@ -98,8 +103,13 @@ def solution_1a(points, stc, stic, ec,  result_of_cost, connected_edges, speed, 
 
   # Capacity constraints
   for (i, j) in arcs:
+      lp += flow[i, j] <= demand
       lp += flow[i, j] <= capacity[i, j]
       lp += flow[i, j] >= 0
+
+  # Constraints
+  lp += pulp.lpSum(y[i, j] for (i, j) in arcs) >= m1  # Lower bound
+  lp += pulp.lpSum(y[i, j] for (i, j) in arcs) <= m2  # Upper bound # Constraint (1e)
 
   # Solve the problem
   lp.solve()
