@@ -254,7 +254,7 @@ def inputs(adjusted_points, total_perimeter, edges_input):
   plt.figure(figsize=(8, 8))
   plt.scatter(adjusted_points[:, 0], adjusted_points[:, 1], color='blue', label='Adjusted Points')
   for i, (x, y) in enumerate(adjusted_points):
-      plt.text(x, y, f"P{i+1}", fontsize=12, ha='right', color='red')
+      plt.text(x, y, f"P{i}", fontsize=12, ha='right', color='red')
 
   # # Connect points to show the polygon
   # for i in range(len(adjusted_points)):
