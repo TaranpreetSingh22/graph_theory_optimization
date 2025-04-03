@@ -23,16 +23,16 @@ def update_lambda(lambda_n, f_ij, y_ij, Z_min_UB, LD_lambda, commodities, arcs, 
     # Compute step size θ^n
     theta_n = theta_0 / np.sqrt(n)  # theta = 5 / sqrt(n)
 
-    # Ensure step size is within the range 0 ≤ θ_n ≤ 2
-    if not (0 <= theta_n <= 2):
-        return lambda_n , "not calculated", theta_n
-
     # Compute sub-gradient s_lambda and update lambda
     lambda_new = {}
 
     # Compute denominator ||s(lambda)||^2
     denominator = 0
     s_lambda = {}
+
+    # Ensure step size is within the range 0 ≤ θ_n ≤ 2
+    if not (0 <= theta_n <= 2):
+        return lambda_n , s_lambda , theta_n
 
     for k in commodities:
         for (i, j) in arcs:
@@ -52,12 +52,12 @@ def update_lambda(lambda_n, f_ij, y_ij, Z_min_UB, LD_lambda, commodities, arcs, 
                 0  # Ensure non-negativity
             )
 
-    print(f"\n------------------ in update_lambda function ----------------------")
-    print(f"Lambda_n: {lambda_n}")
-    print(f"s_lambda: {s_lambda}")
-    print(f"theta_n: {theta_n}")
-    print(f"Denominator: {denominator}")
-    print(f"Lambda_new: {lambda_new}")
-    print("---------------------------------------------------------------------\n")
+    # print(f"\n------------------ in update_lambda function ----------------------")
+    # print(f"Lambda_n: {lambda_n}")
+    # print(f"s_lambda: {s_lambda}")
+    # print(f"theta_n: {theta_n}")
+    # print(f"Denominator: {denominator}")
+    # print(f"Lambda_new: {lambda_new}")
+    # print("---------------------------------------------------------------------\n")
 
     return lambda_new, s_lambda, theta_n

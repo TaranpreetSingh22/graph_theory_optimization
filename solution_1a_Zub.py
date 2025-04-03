@@ -9,9 +9,9 @@ def solution_1a(points, stc, stic, ec,  result_of_cost, connected_edges, speed, 
   # Define nodes and arcs
   nodes = [i for i in range(len(points))]
   arcs = connected_edges
-  m1 = len(nodes) - 1
+  m1 = (2*len(nodes))-2
   m2 = len(arcs)
-  print(arcs)
+  # print(arcs)
 
   station_cost = stc
   steiner_cost = stic
@@ -137,8 +137,10 @@ def solution_1a(points, stc, stic, ec,  result_of_cost, connected_edges, speed, 
       # Output results if feasible
       print("Objective Value:", pulp.value(lp.objective))
       for k in commodities:
+        print(f"----------------------------Commodity {k}:-----------------------------")
         for (i, j) in arcs:
           print(f"Flow on arc ({i}, {j}):", flow[k, i, j].varValue)
+        print("------------------------------------------------------------------------\n")
 
       for (i, j) in arcs:
         print(f"y({i}, {j}):", y[i, j].varValue)
